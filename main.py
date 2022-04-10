@@ -4,7 +4,9 @@ from rand_model import rand_select
 from data_process import dataset
 from utils import accuracy
 from sklearn import ensemble, neural_network, preprocessing, neighbors
-from sklearn.metrics import mean_squared_error
+import os
+# from sklearn.metrics import mean_squared_error
+# import numpy as np
 
 model_set = {'myknn':KNNClassifier, 
              'knn':neighbors.KNeighborsRegressor,
@@ -12,16 +14,23 @@ model_set = {'myknn':KNNClassifier,
             'mlp':neural_network.MLPRegressor,
             'svr':SVR,
             'rand':rand_select}
+train_data_path = os.path.join(os.getcwd(), 'data', 'Database_Scenario1.xlsx')
+test_data_path = os.path.join(os.getcwd(), 'data', 'Tests_Scenario1.xlsx')
+# train_data_path = os.path.join(os.getcwd(), 'data', 'Database_Scenario1_d.xlsx')
+# test_data_path = os.path.join(os.getcwd(), 'data', 'Tests_Scenario1_d.xlsx')   
+
 
 if __name__ == '__main__':
-
-    # define
+ 
+    # # define
     model_name = 'knn'
     use_normalize = True
     
     # load data
-    train_data = dataset(name='Zigbee', flag='train') # ['Zigbee', 'BLE', 'WiFi']
-    test_data = dataset(name='Zigbee', flag='test') # ['Zigbee', 'BLE', 'WiFi']
+    train_data = dataset(name='Zigbee', train_data_path=train_data_path, 
+                        test_data_path=test_data_path, flag='train') # ['Zigbee', 'BLE', 'WiFi']
+    test_data = dataset(name='Zigbee', train_data_path=train_data_path,
+                        test_data_path=test_data_path, flag='train')  # ['Zigbee', 'BLE', 'WiFi']
     
     # data scale
     if use_normalize:
@@ -66,7 +75,10 @@ if __name__ == '__main__':
     
     print(test_data['output_data'])
     print(y_result)
-    print("平均误差距离:", accuracy(test_data['output_data'], y_result))
+    err, thelta = accuracy(test_data['output_data'], y_result)
+    print(f"平均误差距离:{err}, thelta^2:{thelta}")
     
-    mse = mean_squared_error(y_result, test_data['output_data'])
-    print("mean_squared_error: ", mse)
+    # mse = mean_squared_error(y_result, test_data['output_data'])
+    # mse = mean_squared_error(y_result, test_data['output_data'], multioutput='raw_values')
+    # print("mean_squared_error:{}".format(mse))
+    # print("mean_squared_error:{}, thelta^2:{}".format(np.average(mse), np.sqrt(np.var(mse))))

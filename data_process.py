@@ -1,10 +1,8 @@
 import numpy as np  # numpy库
 import pandas as pd  # 导入pandas
 import os
-train_data_path = os.path.join(os.getcwd(), 'data', 'Database_Scenario1.xlsx')
-test_data_path = os.path.join(os.getcwd(), 'data', 'Tests_Scenario1.xlsx')
-# train_data_path = os.path.join(os.getcwd(), 'data', 'Database_Scenario1_d.xlsx')
-# test_data_path = os.path.join(os.getcwd(), 'data', 'Tests_Scenario1_d.xlsx')
+
+
 input_key = ['RSSI A', 'RSSI B', 'RSSI C']
 output_key = ['x', 'y']
 
@@ -19,7 +17,7 @@ def translate(rssi, name):
     return d
 
 
-def dataset(name, flag, use_tran=False):
+def dataset(name, flag, train_data_path, test_data_path, use_tran=False):
     assert name in ['Zigbee', 'BLE', 'WiFi'], 'unknown data'
     assert flag in  ['train', 'test'], 'error select'
     
